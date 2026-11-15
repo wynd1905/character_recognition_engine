@@ -104,4 +104,45 @@ Matrix M_Multiplication(Matrix A, Matrix B) {
     fprintf(stderr, "Wrong matrix dimension\n");
     return (Matrix){0, 0, NULL};
   }
+  Matrix C = M_create(A.rows, B.cols);
+  if (C.data == NULL) {
+    return C;
+  }
+  int idx = 0;
+  for (int i = 0; i < A.rows; i++) {
+    for (int k = 0; k < A.cols; k++) {
+      double a_val = A.data[(i * A.cols) + k];
+      for (int j = 0; j < B.cols; j++) {
+        idx = (i * C.cols) + j;
+        C.data[idx] += a_val * B.data[(k * B.cols) + j];
+      }
+    }
+  }
+  return C;
+}
+
+// Rectified Linear Unit
+void M_ReLU(Matrix *M) {
+  if (M == NULL || M->data == NULL) {
+    return;
+  }
+  for (int i = 0; i < M->rows * M->cols; i++) {
+    if (M->data[i] < 0) {
+      M->data[i] = 0;
+    }
+  }
+}
+
+// Rectified Linear Unit derivative
+void M_ReLU_Derivative(Matrix *M) {
+  if (M == NULL || M->data == NULL) {
+    return;
+  }
+  for (int i = 0; i < M->rows * M->cols; i++) {
+    if (M->data[i] <= 0) {
+      M->data[i] = 0;
+    } else {
+      M->data[i] = 1;
+    }
+  }
 }
