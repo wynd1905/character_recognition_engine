@@ -24,4 +24,23 @@ Matrix M_Hadamard(Matrix A, Matrix B); // Element-wise multiplication
 void M_ReLU(Matrix *M);
 void M_ReLU_Derivative(Matrix *M);
 
+// Softmax
+void M_Softmax(Matrix *M);
+
+// Cross Entropy
+double M_CrossEntropy(Matrix pred, Matrix target);
+
+// Update Weights
+void M_UpdateWeights(Matrix *W, Matrix dW, double lr);
+
+// Mini Batches Implementation
+// Add Bias
+void M_AddBias(Matrix *M, Matrix B);
+
+// Sum columns
+Matrix M_SumCols(Matrix M);
+
+// Update Weight momentum
+void M_UpdateWeightsMomentum(Matrix *W, Matrix *V, Matrix dW, double lr,
+                             double beta, double weight_decay, int batch_size);
 #endif
