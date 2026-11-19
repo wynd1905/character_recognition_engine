@@ -68,26 +68,26 @@ class KanaNetwork:
     def backward(self, X, Y, A1, A2, lr, beta, weight_decay):
         batch_size = X.cols
 
-        # 1. Output layer error & bias gradient
+        # Output layer error & bias gradient
         dZ2 = nn.c_math.M_Subtract(A2, Y)
         dB2 = nn.c_math.M_SumCols(dZ2)
 
-        # 2. Layer 2 weight gradient: dW2 = dZ2 * A1^T
+        # Layer 2 weight gradient: dW2 = dZ2 * A1^T
         A1_T = nn.c_math.M_Transpose(A1)
         dW2 = nn.c_math.M_Multiplication(dZ2, A1_T)
 
-        # 3. Hidden layer error & bias gradient
+        # Hidden layer error & bias gradient
         W2_T = nn.c_math.M_Transpose(self.W2)
         hidden_err = nn.c_math.M_Multiplication(W2_T, dZ2)
         nn.c_math.M_ReLU_Derivative(ctypes.byref(A1))
         dZ1 = nn.c_math.M_Hadamard(hidden_err, A1)
         dB1 = nn.c_math.M_SumCols(dZ1)
 
-        # 4. Layer 1 weight gradient: dW1 = dZ1 * X^T
+        # Layer 1 weight gradient: dW1 = dZ1 * X^T
         X_T = nn.c_math.M_Transpose(X)
         dW1 = nn.c_math.M_Multiplication(dZ1, X_T)
 
-        # 5. Gradient Descent updates (averaged via scaled_lr)
+        # Gradient Descent (averaged via scaled_lr)
         nn.c_math.M_UpdateWeightsMomentum(
             ctypes.byref(self.W2),
             ctypes.byref(self.V_W2),
@@ -125,7 +125,7 @@ class KanaNetwork:
             batch_size,
         )
 
-        # 6. Destroy all temporary matrices (including dB1 and dB2)
+        # Destroy all temporary matrices (including dB1 and dB2)
         for temp in (dZ2, dB2, A1_T, dW2, W2_T, hidden_err, dZ1, dB1, X_T, dW1):
             nn.c_math.M_destroy(ctypes.byref(temp))
 
@@ -158,11 +158,11 @@ class KanaNetwork:
     def load_weights(self, filepath="kana_weights.npz"):
         data = np.load(filepath)
 
-        # 1. Free the existing C matrices before overwriting them
+        # Free the existing C matrices before overwriting them
         for mat in (self.W1, self.B1, self.W2, self.B2):
             nn.c_math.M_destroy(ctypes.byref(mat))
 
-        # 2. Load the saved arrays directly into fresh C matrices
+        # Load the saved arrays directly into fresh C matrices
         self.W1 = nn.numpy_to_c_matrix(data["W1"], *data["W1"].shape)
         self.B1 = nn.numpy_to_c_matrix(data["B1"], *data["B1"].shape)
         self.W2 = nn.numpy_to_c_matrix(data["W2"], *data["W2"].shape)

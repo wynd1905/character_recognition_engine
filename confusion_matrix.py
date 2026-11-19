@@ -52,7 +52,7 @@ def compute_confusion_matrix(net, X_test, y_test, batch_size=256):
 
 
 def print_report(cm):
-    # 1. Print formatted 10x10 Confusion Matrix (Rows = Actual, Cols = Predicted)
+    # Print formatted 10x10 Confusion Matrix (Rows = Actual, Cols = Predicted)
     print("\nConfusion Matrix (Rows = Actual, Cols = Predicted)\n")
     header = "      " + "".join(f"{name:>6}" for name in ROMAJI) + "  | Acc"
     print(header)
@@ -68,7 +68,7 @@ def print_report(cm):
     print("-" * len(header))
     print(f"Overall Test Accuracy: {overall_acc:.2f}%\n")
 
-    # 2. Rank the most common misclassifications (off-diagonal entries)
+    # Rank the most common misclassifications (off-diagonal entries)
     errors = []
     for true_idx in range(10):
         for pred_idx in range(10):

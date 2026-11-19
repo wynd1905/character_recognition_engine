@@ -52,15 +52,15 @@ def predict_single(net, img_28x28):
 
 
 if __name__ == "__main__":
-    # 1. Load test dataset
+    # Load test dataset
     test_imgs = np.load("data/kmnist-test-imgs.npz")["arr_0"]
     test_labels = np.load("data/kmnist-test-labels.npz")["arr_0"]
 
-    # 2. Initialize network and load trained C weights
+    # Initialize network and load trained C weights
     net = KanaNetwork(input_size=784, hidden_size=128, output_size=10)
     net.load_weights("kana_weights.npz")
 
-    # 3. Pick a specific index via CLI argument, or a random one
+    # Pick a specific index via CLI argument, or a random one
     if len(sys.argv) > 1:
         idx = int(sys.argv[1])
     else:
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     img = test_imgs[idx]
     true_idx = int(test_labels[idx])
 
-    # 4. Run prediction and display results
+    # Run prediction and display results
     pred_idx, confidence, probs = predict_single(net, img)
 
     print(f"\n--- Test Image #{idx} ---")

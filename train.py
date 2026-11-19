@@ -6,13 +6,13 @@ import numpy as np
 import neural_network_engine as nn
 from network import KanaNetwork
 
-# 1. Load KMNIST arrays
+# Load KMNIST arrays
 train_imgs = np.load("data/kmnist-train-imgs.npz")["arr_0"]  # (60000, 28, 28)
 train_labels = np.load("data/kmnist-train-labels.npz")["arr_0"]  # (60000,)
 test_imgs = np.load("data/kmnist-test-imgs.npz")["arr_0"]  # (10000, 28, 28)
 test_labels = np.load("data/kmnist-test-labels.npz")["arr_0"]  # (10000,)
 
-# 2. Flatten (28x28 -> 784) and normalize to [0.0, 1.0]
+# Flatten (28x28 -> 784) and normalize to [0.0, 1.0]
 X_train = train_imgs.reshape(-1, 784).astype(np.float64) / 255.0
 X_test = test_imgs.reshape(-1, 784).astype(np.float64) / 255.0
 
@@ -42,7 +42,7 @@ def evaluate(net, images, labels):
     return (correct / len(images)) * 100.0
 
 
-# 3. Initialize network and hyperparameters
+# Initialize network and hyperparameters
 net = KanaNetwork(input_size=784, hidden_size=128, output_size=10)
 epochs = 10
 batch_size = 64
@@ -52,7 +52,7 @@ best_acc = 0.0
 history_loss = []
 history_acc = []
 
-# 4. Main Training Loop (Stochastic Gradient Descent)
+# Main Training Loop
 for epoch in range(epochs):
     start_time = time.time()
     total_loss = 0.0
